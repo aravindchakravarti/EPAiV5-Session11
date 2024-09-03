@@ -77,3 +77,38 @@ def __next__(self):
         return ret_value
 ```
 
+# Making the class `RegConvexPolygon` *INDEXABLE*
+
+### What is `__getitem__`?
+The `__getitem__` method is a special method in Python that allows instances of a class to use the square bracket [] notation for indexing, similar to lists or dictionaries. When we implement `__getitem__`, we enable our objects to be accessed using an index.
+
+### Explanation of the Code
+Check the Type of the Index:
+
+The method first checks if the index provided is an integer.
+If the index is not an integer, a `TypeError` is raised, meaning that we can only use integers to index this object.
+
+### Validate the Index Value:
+The method then checks if the index exceeds the maximum number of edges allowed (`self._max_edges`).
+If it does, a `ValueError` is raised with a message indicating that the polygon can only have up to `self._max_edges` edges.
+
+### Set the Number of Edges:
+If the index is valid, the method sets the number of edges of the polygon (`self.edges = index`).
+This operation also triggers the recalculation of the polygon's area and perimeter because the edges setter method sets a flag to recalculate the area.
+
+### Return Area and Perimeter:
+Finally, the method returns the area and perimeter of the polygon as a tuple (`self.area`, `self.perimeter`).
+
+```python
+# Makes the object indexable
+def __getitem__(self, index):
+    if not isinstance(index, int):
+        raise TypeError ('Index has to have of type int')
+    
+    if index > self._max_edges:
+        raise ValueError(f"RegConvexPolygon supports polygons up to {self._max_edges} edges")
+    
+    self.edges = index
+    return self.area, self.perimeter
+```
+
